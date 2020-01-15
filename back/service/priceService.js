@@ -1,6 +1,8 @@
 const { db } = require("../configuration/database/connection");
 const { resultPrix } = require("../utils/easy");
 
+//
+
 var ref = db.ref("prices");
 
 const getPrice = () => ref.once("value").then(snap => snap.val());
