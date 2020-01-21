@@ -7,15 +7,18 @@ var ref = db.ref("prices");
 
 const getPrice = () => ref.once("value").then(snap => snap.val());
 
-const addPrice = async date => {
-  const { departurePrix, returnPrix } = await resultPrix();
+const addPrice = async (date, data) => {
+  const { departurePrix, returnPrix } = await resultPrix(data);
   db.ref("prices/" + date).set({
     departurePrix,
     returnPrix
   });
 };
 
+const clearPrice = () => ref.remove();
+
 module.exports = {
   getPrice,
-  addPrice
+  addPrice,
+  clearPrice
 };

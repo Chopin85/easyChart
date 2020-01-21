@@ -9,6 +9,14 @@ const getPrice = async (req, res) => {
   });
 };
 
+const clearPrice = async (req, res) => {
+  const prices = await priceService.clearPrice();
+  console.log("controller", prices);
+  res.status(200).send({
+    success: true
+  });
+};
+
 // const addPrice = async (req, res) => {
 //   const addPrice = await priceService.addPrice(234);
 //   console.log("controller", addPrice);
@@ -18,6 +26,7 @@ const getPrice = async (req, res) => {
 // };
 
 module.exports = {
-  getPrice
+  getPrice,
+  clearPrice
   // addPrice
 };

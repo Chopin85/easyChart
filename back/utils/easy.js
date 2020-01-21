@@ -2,7 +2,12 @@ const puppeteer = require("puppeteer");
 const devices = require("puppeteer/DeviceDescriptors");
 const iPhonex = devices["iPad Pro landscape"];
 
-const resultPrix = async () => {
+const resultPrix = async ({
+  origin,
+  destination,
+  departureDate,
+  returnDate
+}) => {
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
@@ -14,30 +19,31 @@ const resultPrix = async () => {
   await page.waitForSelector('input[name="origin"]');
   await page.click('input[name="origin"]');
   await page.focus('input[name="origin"]');
-  await page.keyboard.type("Parigi Orly (ORY)", { delay: 100 });
+  await page.keyboard.type(`${origin}`, { delay: 100 });
   await page.keyboard.press("Enter");
 
   //DESTINATION
   await page.waitForSelector('input[name="destination"]');
   await page.click('input[name="destination"]');
   await page.focus('input[name="destination"]');
-  await page.keyboard.type("Milano Linate (LIN)", { delay: 100 });
+  await page.keyboard.type(`${destination}`, { delay: 100 });
   await page.keyboard.press("Enter");
 
   //DEPART
   await page.waitForSelector('div[class="outbound-date-picker"]');
   await page.click('div[class="outbound-date-picker"]');
-  await page.waitForSelector('div[data-date="2020-02-06"] > a');
+  await page.waitForSelector(`div[data-date="${departureDate}"] > a`);
 
-  await page.evaluate(() => {
-    document.querySelector('div[data-date="2020-02-06"] > a').click();
-  });
+  await page.evaluate(departureDate => {
+    document.querySelector(`div[data-date="${departureDate}"] > a`).click();
+  }, departureDate);
 
   await page.waitFor(1000);
 
-  await page.evaluate(() => {
-    document.querySelector('div[data-date="2020-02-16"] > a').click();
-  });
+  //RETURN
+  await page.evaluate(returnDate => {
+    document.querySelector(`div[data-date="${returnDate}"] > a`).click();
+  }, returnDate);
 
   await page.waitFor(2000);
 
@@ -69,6 +75,13 @@ const resultPrix = async () => {
   return targetPrix;
 };
 
-// resultPrix();
+// const data = {
+//   origin: "Parigi Orly (ORY)",
+//   destination: "Milano Linate (LIN)",
+//   departureDate: "2020-02-06",
+//   returnDate: "2020-02-16"
+// };
+
+// resultPrix(data);
 
 module.exports = { resultPrix };
