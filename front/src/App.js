@@ -26,7 +26,7 @@ const App = () => {
 
   const [returnDate, setreturnDate] = useState(departDate);
 
-  const [hours, sethours] = useState(60);
+  const [hours, sethours] = useState(1);
 
   const [departFrom, setDepartFrom] = useState("Parigi Orly (ORY)");
 
@@ -73,23 +73,20 @@ const App = () => {
 
     const fetchData2 = async () => {
       const result = await axios("http://localhost:3001/api/data/getData");
-      // console.log(result.data.data);
 
       if (result.data.data) {
         const {
           origin,
           destination,
-          departureData,
-          returnData,
+          departureDate,
+          returnDate,
           sec
         } = result.data.data;
 
-        console.log("parse", parseInt(sec));
-
         setDepartFrom(origin);
         setRetrunTo(destination);
-        setdepartDate(moment(departureData).toDate());
-        setreturnDate(moment(returnData).toDate());
+        setdepartDate(moment(departureDate).toDate());
+        setreturnDate(moment(returnDate).toDate());
         sethours(parseInt(sec));
       }
     };
@@ -232,26 +229,14 @@ const App = () => {
           Every hours
         </Typography>
         <Slider
-          defaultValue={hours}
-          getAriaValueText={value => console.log(value)}
-          aria-labelledby="discrete-slider-always"
-          step={10}
-          marks={marks}
-          valueLabelDisplay="on"
           style={{ width: "400px" }}
-          // value={hours}
-          // defaultValue={hours}
-          // getAriaValueText={value => {
-          //   sethours(value);
-          //   const numb = 1;
-          //   console.log(value, numb);
-          // }}
-          // aria-labelledby="discrete-slider-always"
-          // step={1}
-          // marks={marks}
-          // valueLabelDisplay="auto"
-          // min={1}
-          // max={60}
+          value={hours}
+          onChange={(event, value) => sethours(value)}
+          valueLabelDisplay="auto"
+          step={1}
+          marks={marks}
+          min={1}
+          max={24}
         />
       </div>
       <div style={{ margin: "20px 0 20px 0" }}>
